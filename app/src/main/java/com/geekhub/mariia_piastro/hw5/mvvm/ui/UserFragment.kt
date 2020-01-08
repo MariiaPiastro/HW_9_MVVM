@@ -17,7 +17,7 @@ class UserFragment : Fragment() {
 
     private var model: UserViewModel? = null
     private var mUser: User? = null
-    private var login = ""
+    private var login = "MariiaPiastro"
 
 
     companion object {
@@ -42,14 +42,14 @@ class UserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        model?.load(login)?.observe(this, Observer { it ->
-            mUser = it
-        })
         return inflater.inflate(R.layout.fragment_user, container, false)
            }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        model?.load(login)?.observe(this, Observer { it ->
+            mUser = it
+        })
         val userDetail = arguments?.getSerializable("user") as User?
         with(view) {
             tvLogin.text = String.format("Login: ", userDetail?.login)

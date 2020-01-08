@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">MVVM</string>
     <string name="content_description_user_avatar_image">User avatar image</string>
+    <string name="button_find_user">Find user</string>
+    <string name="hint_enter_user_login">Enter user login</string>
 </resources>

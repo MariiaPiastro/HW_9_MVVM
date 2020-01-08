@@ -10,13 +10,13 @@ class UserViewModel() : ViewModel() {
 
     private val roomDatabaseRepository = RoomDatabaseRepository()
     private val userRepository = UserRepository()
-    private var mUser: LiveData<User>
     private var retroObservable: LiveData<User>
+    private var mUser: LiveData<User>
     private lateinit var login: String
 
     init {
-        mUser = userRepository.getUser(login)
-        retroObservable = roomDatabaseRepository.load(login)!!
+        retroObservable = userRepository.getUser(login)
+        mUser = roomDatabaseRepository.load(login)!!
     }
 
     fun load (login: String): LiveData<User> {

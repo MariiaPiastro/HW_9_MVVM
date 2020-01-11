@@ -9,16 +9,16 @@ import kotlinx.coroutines.launch
 
 class RoomDatabaseRepository {
 
-    val db = UserRoomDatabase.getUserRoomDatabase(MainApplication.applicationContext())
-    val mUserDao = db?.userDao()
+    val db = UserRoomDatabase.instance
+    val mUserDao = db.userDao()
 
     fun insert(user: User) {
         GlobalScope.launch {
-            mUserDao?.insert(user)
+            mUserDao.insert(user)
         }
     }
 
     fun load(login: String): LiveData<User>? {
-        return mUserDao?.load(login)
+        return mUserDao.load(login)
     }
 }

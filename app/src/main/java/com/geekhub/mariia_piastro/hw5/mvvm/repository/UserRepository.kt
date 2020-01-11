@@ -1,33 +1,28 @@
 package com.geekhub.mariia_piastro.hw5.mvvm.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.geekhub.mariia_piastro.hw5.mvvm.model.User
 import com.geekhub.mariia_piastro.hw5.mvvm.network.ApiFactory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.HttpException
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class UserRepository {
 
-    fun getUser(login: String): LiveData<User> {
-        val data = MutableLiveData<User>()
+    val roomDatabaseRepository by lazy {
+        RoomDatabaseRepository()
+    }
 
-        ApiFactory.getUser(login)
-            .enqueue(object : Callback<User> {
+    suspend fun getUser(login: String): User = suspendCoroutine{
+        val response = ApiFactory.getUser(login).execute()
+        val user = if (response.isSuccessful) {
+            response.body()!!
+        } else {
+            throw HttpException(response)
+        }
 
-                override fun onResponse(call: Call<User>, response: Response<User>) {
-                    if (response.isSuccessful) {
-                        val roomDatabaseRepository = RoomDatabaseRepository()
-                        roomDatabaseRepository.insert(response.body()!!)
-                        data.value = response.body()
-                    }
-                }
+        roomDatabaseRepository.insert(user)
 
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                }
-            })
-        return data
+        it.resume(user)
     }
 
 }

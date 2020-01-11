@@ -9,13 +9,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.geekhub.mariia_piastro.hw5.mvvm.R
 import com.geekhub.mariia_piastro.hw5.mvvm.model.User
-import com.geekhub.mariia_piastro.hw5.mvvm.viewModel.UserViewModel
+import com.geekhub.mariia_piastro.hw5.mvvm.viewModel.MainViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user.view.*
 
 class UserFragment : Fragment() {
 
-    private var model: UserViewModel? = null
+    private var model: MainViewModel? = null
     private var mUser: User? = null
     private var login = "MariiaPiastro"
 
@@ -35,7 +35,7 @@ class UserFragment : Fragment() {
         if (arguments != null) {
             login = arguments!!.getString("login")!!
         }
-        model = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
+        model = ViewModelProviders.of(requireActivity()).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(

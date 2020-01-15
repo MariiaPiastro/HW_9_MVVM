@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,11 +29,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _isShowSpinner = MutableLiveData<Boolean>(false)
     val isShowSpinner: LiveData<Boolean> = _isShowSpinner
 
-    //TODO: move this into separete UserViewModel
-    fun load (login: String): LiveData<User> {
-        TODO()
-    }
-
     fun onLoginClicked(login: String) {
         if (login.isNotEmpty()) {
             GlobalScope.launch {
@@ -40,14 +36,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     withContext(Dispatchers.Main) {
                         _isShowSpinner.value = true
                     }
-
                     val user = userRepository.getUser(login)
                     withContext(Dispatchers.Main) {
                         _loggedInUser.value = user
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Toast.makeText(getApplication(), e.message, Toast.LENGTH_SHORT).show()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
+                    }
                 } finally {
                     withContext(Dispatchers.Main) {
                         _isShowSpinner.value = false

@@ -12,7 +12,6 @@ abstract class UserRoomDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     companion object {
-
         val instance: UserRoomDatabase by lazy {
             Room.databaseBuilder(
                 MainApplication.applicationContext(),

@@ -5,25 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.geekhub.mariia_piastro.hw5.mvvm.R
 import com.geekhub.mariia_piastro.hw5.mvvm.model.User
-import com.geekhub.mariia_piastro.hw5.mvvm.viewModel.MainViewModel
+import com.geekhub.mariia_piastro.hw5.mvvm.viewModel.UserViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user.view.*
 
 class UserFragment : Fragment() {
 
-    private var model: MainViewModel? = null
-    private var mUser: User? = null
-    private var login = "MariiaPiastro"
-
+    private lateinit var model: UserViewModel
+    private lateinit var login: String
+    lateinit var mUser: User
 
     companion object {
-        fun newInstance(user: User): UserFragment {
+        fun newInstance(login: String): UserFragment {
             val args = Bundle()
-            args.putSerializable("user", user)
+            args.putString("login", login)
             val fragment = UserFragment()
             fragment.arguments = args
             return fragment
@@ -35,7 +33,7 @@ class UserFragment : Fragment() {
         if (arguments != null) {
             login = arguments!!.getString("login")!!
         }
-        model = ViewModelProviders.of(requireActivity()).get(MainViewModel::class.java)
+        model = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -47,20 +45,18 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        model?.load(login)?.observe(this, Observer { it ->
-            mUser = it
-        })
-        val userDetail = arguments?.getSerializable("user") as User?
+
+        mUser= model.load(login)
         with(view) {
-            tvLogin.text = String.format("Login: ", userDetail?.login)
-            tvUrl.text = String.format("URL: ", userDetail?.url)
-            tvReposUrl.text = String.format("ReposURL: ", userDetail?.reposUrl)
-            tvType.text = String.format("Type: ", userDetail?.type)
-            tvName.text = String.format("Name: ", userDetail?.name)
-            tvCompany.text = String.format("Company: ", userDetail?.company)
-            tvLocation.text = String.format("Location: ", userDetail?.location)
-            tvRegistration.text = String.format("URL: ", userDetail?.registration)
-            Picasso.get().load(userDetail?.avatarUrl).into(view.imageViewAvatar)
+            tvLogin.text = String.format("Login: ", mUser.login)
+            tvUrl.text = String.format("URL: ", mUser.url)
+            tvReposUrl.text = String.format("ReposURL: ", mUser.reposUrl)
+            tvType.text = String.format("Type: ", mUser.type)
+            tvName.text = String.format("Name: ", mUser.name)
+            tvCompany.text = String.format("Company: ", mUser.company)
+            tvLocation.text = String.format("Location: ", mUser.location)
+            tvRegistration.text = String.format("URL: ", mUser.registration)
+            Picasso.get().load(mUser.avatarUrl).into(view.imageViewAvatar)
         }
     }
 }

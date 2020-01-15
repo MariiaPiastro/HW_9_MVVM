@@ -1,6 +1,7 @@
 package com.geekhub.mariia_piastro.hw5.mvvm.ui
 
 import android.os.Bundle
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,38 +13,39 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var model: MainViewModel
-    private var userLogin: String = ""
+    private lateinit var userLogin: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         model = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        model.loggedInUser.observe(this, Observer {
+        model.loggedInUser.observe(this, Observer { it ->
             if (it != null) {
                 supportFragmentManager
                     .beginTransaction()
                     .replace(
-                        R.id.fragment_container, UserFragment.newInstance(it)
+                        R.id.fragment_container, UserFragment.newInstance(userLogin)
                     )
                     .commit()
             }
         })
         model.isShowSpinner.observe(this, Observer {
             if(it) {
-                //TODO: show spinner
+                progressBar.visibility = ProgressBar.VISIBLE
             } else {
-                //TODO: remove spinner
+                progressBar.visibility = ProgressBar.INVISIBLE
             }
         })
 
 
         buttonFindUser.setOnClickListener {
-            model.onLoginClicked(editTextLogin.text.toString().trim())
+            userLogin = editTextLogin.text.toString().trim()
+            model.onLoginClicked(userLogin)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable("login", userLogin)
+        outState.putString("login", userLogin)
     }
 }

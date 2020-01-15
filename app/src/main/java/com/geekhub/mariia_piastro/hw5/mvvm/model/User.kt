@@ -18,9 +18,9 @@ data class User(
     @Json(name = "repos_url")
     @ColumnInfo(name = "repos_url") val reposUrl: String,
     val type: String,
-    val name: String,
-    val company: String,
-    val location: String,
+    val name: String?,
+    val company: String?,
+    val location: String?,
     @Json(name = "created_at")
     @ColumnInfo(name = "created_at") val registration: String
 ): Serializable

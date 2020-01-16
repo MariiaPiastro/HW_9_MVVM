@@ -46,19 +46,21 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        model.load(login).observe(this, Observer {
-            mUser = it
+        model.init((login))
+        model.selectedUser.observe(this, Observer { user: User? ->
+            if (user != null) {
+                with(view) {
+                    tvLogin.text = String.format("Login: ", mUser.login)
+                    tvUrl.text = String.format("URL: ", mUser.url)
+                    tvReposUrl.text = String.format("ReposURL: ", mUser.reposUrl)
+                    tvType.text = String.format("Type: ", mUser.type)
+                    tvName.text = String.format("Name: ", mUser.name)
+                    tvCompany.text = String.format("Company: ", mUser.company)
+                    tvLocation.text = String.format("Location: ", mUser.location)
+                    tvRegistration.text = String.format("URL: ", mUser.registration)
+                    Picasso.get().load(mUser.avatarUrl).into(view.imageViewAvatar)
+                }
+            }
         })
-        with(view) {
-            tvLogin.text = String.format("Login: ", mUser.login)
-            tvUrl.text = String.format("URL: ", mUser.url)
-            tvReposUrl.text = String.format("ReposURL: ", mUser.reposUrl)
-            tvType.text = String.format("Type: ", mUser.type)
-            tvName.text = String.format("Name: ", mUser.name)
-            tvCompany.text = String.format("Company: ", mUser.company)
-            tvLocation.text = String.format("Location: ", mUser.location)
-            tvRegistration.text = String.format("URL: ", mUser.registration)
-            Picasso.get().load(mUser.avatarUrl).into(view.imageViewAvatar)
-        }
     }
 }

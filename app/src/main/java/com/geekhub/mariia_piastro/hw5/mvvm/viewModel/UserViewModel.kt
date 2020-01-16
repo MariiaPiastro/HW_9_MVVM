@@ -18,21 +18,19 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         RoomDatabaseRepository()
     }
 
-    private lateinit var _selectedUser: LiveData<User>
+    private val _selectedUser = MutableLiveData<User>()
+    val selectedUser: LiveData<User> = _selectedUser
 
-    fun load(login: String): LiveData<User> {
+    fun init(login: String) {
         GlobalScope.launch {
-            try {
-                withContext(Dispatchers.Main){
-                    _selectedUser = roomDatabaseRepository.load(login)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
-                }
-            }
+            load(login)
         }
-        return _selectedUser
+    }
+
+    private suspend fun load(login: String) {
+        val user = roomDatabaseRepository.load(login)
+        withContext(Dispatchers.Main) {
+            _selectedUser.value = user
+        }
     }
 }

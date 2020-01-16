@@ -5,6 +5,8 @@ import com.geekhub.mariia_piastro.hw5.mvvm.model.User
 import com.geekhub.mariia_piastro.hw5.mvvm.room.UserRoomDatabase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class RoomDatabaseRepository {
 
@@ -17,7 +19,9 @@ class RoomDatabaseRepository {
         }
     }
 
-    fun load(login: String): LiveData<User> {
-        return mUserDao.load(login)
+    suspend fun load(login: String): User? = suspendCoroutine {
+        val user = mUserDao.load(login)
+        it.resume(user)
     }
+
 }

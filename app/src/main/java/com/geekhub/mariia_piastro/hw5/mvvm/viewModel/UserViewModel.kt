@@ -3,6 +3,8 @@ package com.geekhub.mariia_piastro.hw5.mvvm.viewModel
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.geekhub.mariia_piastro.hw5.mvvm.model.User
 import com.geekhub.mariia_piastro.hw5.mvvm.repository.RoomDatabaseRepository
 import kotlinx.coroutines.Dispatchers
@@ -16,13 +18,13 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         RoomDatabaseRepository()
     }
 
-    lateinit var selectedUser: User
+    private lateinit var _selectedUser: LiveData<User>
 
-    fun load(login: String): User {
+    fun load(login: String): LiveData<User> {
         GlobalScope.launch {
             try {
                 withContext(Dispatchers.Main){
-                    selectedUser = roomDatabaseRepository.load(login)
+                    _selectedUser = roomDatabaseRepository.load(login)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -31,6 +33,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         }
-        return selectedUser
+        return _selectedUser
     }
 }

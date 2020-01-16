@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.geekhub.mariia_piastro.hw5.mvvm.R
 import com.geekhub.mariia_piastro.hw5.mvvm.model.User
@@ -41,12 +42,13 @@ class UserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_user, container, false)
-           }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mUser= model.load(login)
+        model.load(login).observe(this, Observer {
+            mUser = it
+        })
         with(view) {
             tvLogin.text = String.format("Login: ", mUser.login)
             tvUrl.text = String.format("URL: ", mUser.url)

@@ -43,9 +43,4 @@ class MainActivity : AppCompatActivity() {
             model.onLoginClicked(userLogin)
         }
     }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("login", userLogin)
-    }
 }

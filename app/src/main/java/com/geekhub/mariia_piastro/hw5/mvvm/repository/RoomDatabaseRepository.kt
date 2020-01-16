@@ -1,5 +1,6 @@
 package com.geekhub.mariia_piastro.hw5.mvvm.repository
 
+import androidx.lifecycle.LiveData
 import com.geekhub.mariia_piastro.hw5.mvvm.model.User
 import com.geekhub.mariia_piastro.hw5.mvvm.room.UserRoomDatabase
 import kotlinx.coroutines.GlobalScope
@@ -16,7 +17,7 @@ class RoomDatabaseRepository {
         }
     }
 
-    fun load(login: String): User {
+    fun load(login: String): LiveData<User> {
         return mUserDao.load(login)
     }
 }
